@@ -1,8 +1,21 @@
 import React from "react";
+import { useState } from "react";
 
 const MovieCard = ({
   movie: { title, vote_average, poster_path, release_date, original_language },
+  onClick,
+}: {
+  movie: {
+    title: string;
+    vote_average: number;
+    poster_path: string;
+    release_date: string;
+    original_language: string;
+  };
+  onClick: () => void;
 }) => {
+  const [modalOpen, setmodalOpen] = useState(false);
+  const [selectedMovie, setselectedMovie] = useState<any>(null);
   return (
     <div className="movie-card">
       <img
@@ -15,7 +28,12 @@ const MovieCard = ({
       />
 
       <div className="mt-4">
-        <h3>{title}</h3>
+        <h3
+          className="cursor-pointer text-blue-500 underline"
+          onClick={onClick}
+        >
+          {title}
+        </h3>
 
         <div className="content">
           <div className="rating">

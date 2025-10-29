@@ -3,6 +3,7 @@ import { useDebounce } from "react-use";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
+import MovieDetailModal from "./components/MovieDetailModal";
 import { updateSearchCount, getTrendingMovies } from "./appwrite";
 
 const BASE_API_URL = "https://api.themoviedb.org/3";
@@ -23,6 +24,9 @@ function App() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setdebouncedSearchTerm] = useState("");
+
+  const [modalOpen, setmodalOpen] = useState(false);
+  const [selectedMovie, setselectedMovie] = useState<any>(null);
 
   useDebounce(
     () => {
@@ -119,13 +123,25 @@ function App() {
           ) : (
             <ul>
               {MovieList.map((movie: any) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  onClick={() => {
+                    setselectedMovie(movie);
+                    setmodalOpen(true);
+                  }}
+                />
               ))}
             </ul>
           )}
           {errorMessage && <p className="error">{errorMessage}</p>}
         </section>
       </div>
+      <MovieDetailModal
+        modalOpen={modalOpen}
+        setModalOpen={setmodalOpen}
+        movie={selectedMovie}
+      />
     </main>
   );
 }
